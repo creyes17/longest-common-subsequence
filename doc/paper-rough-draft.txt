@@ -1,0 +1,103 @@
+OUTLINE:
+
+1) Abstract
+2) Introduction
+3) Algorithm
+4) Proof of Correctness
+5) Runtime Analysis
+
+--- Rough Draft 1 ---
+
+1) Abstract
+We present an exact algorithm to find a Longest Common Subsequence between two sequences. Given two sequences of length at most N, our algorithm determines in time 
+O(N * LogN) a single, not necessarily consecutive subsequence shared by both sequences of length M such that there is no other subsequence shared by both sequences
+with length greater than M.
+
+2) Introduction
+Given exactly two sequences, the Longest Common Subsequence problem asks for a maximum length sequence that occurs as a subsequence of both input strings.
+TODO: Continue explaining the problem
+
+3) Algorithm
+The main idea is to reduce it to the Longest Increasing Subsequence problem, which we can solve in O(N LogN) time. In order for this to be maximally advantageous, we need our reduction to take O(N LogN) time (or better).
+
+Given:
+Let A be one input sequence, with length N.
+Let B be the other input sequence, with length M such that N = M + C for some arbitrary, non-negative constant C.
+
+First: Create a new sequence A' such that for each element e_a in A', there exists an element in A at index e_a[0] with value e_a[1]. Likewise, create a new sequence B' such that for every element e_b in B', there exists an element in B at index e_b[0] with value e_b[1].
+	Note: You can use whatever data structure you like to contain the index and value for each element. I used vectors of length two in my example implementation for convenience.
+
+Second: Sort sequence A' and B' first by value (index 1) and then by index (index 0).
+
+Third: We construct a new sequence C in the following manor:
+
+If A' or B' are empty, C is complete. Proceed to the Fourth step. 
+
+Otherwise, let e_a be the first element in A' and e_b be the first element in B'.
+	Compare e_a[1] and e_b[1]
+		If the values are equal:
+			Add an element e_c = [e_a[0], e_a[1], e_b[1]] to C
+			Remove the first element from A' and from B' and repeat the Third step
+		Otherwise:
+			Let x = max(e_a[1], e_b[1])
+			drop all elements of A' from the beginning until you find an element with value greater than or equal to x using binary search
+			do the same with B'
+			repeat the Third step
+
+Fourth: Sort sequence C by the index of the element from A (namely, by index 1).
+
+Now we find the Longest Increasing Subsequence in C among the index of the elements from B (namely, index 2).
+
+Taking the ordered values of those elements (namely index 0) gives us a longest common subsequence between A and B.
+
+<!-- optimal subproblems? [per Chrisantha] -->
+
+4) Proof of correctness
+
+Lemma 1:
+The resulting sequence C of the Third step above gives us a set of all common elements between the two sequences.
+
+Proof.
+1) Where are the places where we could have skipped an element? Show not possible to have skipped
+2) Show not possible to have missed elements at the beginning
+3) Prove by contradiction that we couldn't have missed elements at the end
+4) Prove that we won't have any duplicated elements
+5) Prove that we won't have any elements in C that weren't in both A and B
+
+
+Prove that our solution exists in both
+
+Prove that our solution is a maximal length one
+	1) There cannot exist an element that should have preceded our result sub-sequence
+	2) There cannot exist an element that should have followed our result sub-sequence
+	3) There cannot exist an element that should have been in the middle of our result sub-sequence
+
+5) Runtime Analysis
+
+In the first step, transforming our input requires us looking at every element. Therefore this is O(N + M).
+
+In the second step, sorting each input takes O(N LogN) + O(M LogM) time.
+	Reference paper on sorting
+
+In the third step, we potentially need to examine every element in A and in B. For each element we examine, we do a binary search for the number of elements to drop. Therefore, this step takes O((N + M) * (LogN + LogM)) time.
+
+Note that the resulting sequence C has length less than or equal to M.
+
+In the fourth step, sorting the input takes O(M LogM) time (because C has length at most M).
+
+Finding the Longest Increasing Subsequence can be done in O(M LogM) time. (Reference other paper here)
+
+Transforming the output takes O(M) time assuming the worst case where the longest common sequence is exactly B.
+
+Putting it all together, we have O(N LogN + M LogM + ((N + M) * (LogN + LogM)) + M LogM + M LogM + M)
+	O(N LogN + 3 * (M LogM) + M + ((N + M) * (LogN + LogM)))
+	Given that N = M + C for some non-negative constant C:
+	O(N LogN + 3 * (N LogN) + N + ((2N) * (2LogN)))
+	O(4 * (N LogN) + N + 2*(N LogN))
+	O(N LogN + N)
+	O(N LogN)
+
+
+--- Rough Draft 2 ---
+
+Need to include previous work
