@@ -14,6 +14,8 @@ Returns a subsequence S such that:
 
 ## Algorithm Overview
 
+The overall idea is to reduce the LCS problem into a Longest Increasing Subsequence (LIS) problem which we already know how to solve in O(N logN) time
+
 We'll use an example input of:
 * A = [ 2 7 8 1 5 ]
 * B = [ 8 1 2 6 4 ]
@@ -63,45 +65,119 @@ Expected longest common subsequence is [ 8 1 ]
   * [ [8 2 0] [1 3 1] ] => [ 8 1 ]
   * O(N)
 
+### Proof of correctness
+
+Need to show that for a result sequence R of our algorithm:
+1) R is a subsequence of A
+2) R is a subsequence of B
+3) There doesn't exist a sequence R' such that:
+  * R' is a subsequence of A
+  * R' is a subsequence of B
+  * R' has more elements than R
+
+In order for R to be a subsequence of A, all of its elements must be in A and they must appear in the same order in R as in A
+* We know that all elements of R are in A because in step 3, we only took elements whose values were in both A and B
+* We know that the elements of R are in the same order as in A because we sorted them by their index into A in step 4
+
+In order for R to be a subsequence of B, the same properties must hold
+* We know that all elements of R are in B because in step 3, we only took elements whose values were in both A and B
+* By finding the longest increasing subsequence of indices into B, we guaranteed that our elements would be in the same order as they are in B
+  * If there was an element R[i] such that for some positive k, there is no R[i+k] which comes after some R[i] in B, then the index into B of R[i+k] couldn't be greater than the index into B of R[i]. Therefore the LIS from step 5 is not actually an increasing subsequence.
+
+Assume there exists a sequence R' described above. Let e' be an element in R' that is not in R.
+* e' must be a member of both A and B. Therefore, it will be included in C in step 3 above
+  * If e' was not a member of A, then R' could not be a subsequence of A. Same with B
+* TODO: Finish proof. 
+  * Basically, by sorting by index into A in step 4, we have all elements of A that are also in B ordered by A
+  * Then, the LIS by index B maintains the order in A (otherwise it's not a subsequence and not an LIS)
+     * It's also a longest possible subsequence (again, otherwise it's not an LIS)
+  * If there were an R', then it would have to be longer than the longest increasing subsequence by index into B which is a contradiction
+  * I'm still trying to think of the best way to put that into formal logic. Right now it sounds kind of circular to me
+
+Eventually I'll try to write a proof here in more formal language and notation with LaTex
+
 ## LIS algorithm overview
 
-See other sites
+Given a single input sequence, I, find a subsequence S of I such that:
+* there does not exist a subsequence S' of I with more elements than S and
+* S[i] < S[i+1] for all 0 <= i < |S|
 
-For each element in input:
-1. If the value is greater than any value yet encountered, append it to the end of a sequence S
+S is a subsequence of I if you can remove some number of elements from I without reordering it to yield S
+
+You can find O(N logN) algorithms for LIS many places. [Here's one of many examples](http://www.techiedelight.com/longest-increasing-subsequence/)
+
+Create a sequence S containing the first element in the input. Then, for each remaining element in input:
+1. If the value is greater than the last value in S, append it to the end of S
 2. Otherwise, find the smallest value in S that is greater than or equal to it. Replace that value with this element
 
-Return S
+So if you had the input [2 0 1] for example:
+* Let e be the element we're examining from the input
+* Initialize S = [2]
+* S = [2], e = 0
+  * e is less than the last value in S
+  * So find the smallest value in S that is greater than or equal to it: S[0] = 2
+  * And replace it with this element's value
+  * S => [0]
+* S = [0], e = 1
+  * e is greater than the last value in S. Append it
+  * S => [0 1]
+* We've run out of elements in the input, so return S
 
-TODO: Add example
+I leave the proof of correctness for LIS as an exercise to the reader. 
+I'm convinced this algorithm is not correct, but even if it's not, then just replace with your favorite O(N logN) solution to LIS that is actually correct instead.
 
 ## Installation
 
-Download from http://example.com/FIXME.
+You'll need the [leiningen tool](https://github.com/technomancy/leiningen) installed to build yourself.
+
+Clone this repository. I'll reference the root directory of the repository below as $REPO.
+
+Then from $REPO, run `lein compile; lein uberjar`
+
+If you have the [lein bin-plus](https://github.com/BrunoBonacci/lein-binplus) plugin, you can run `lein bin` from the root directory to create a bash executable.
+* Then run the executable with `target/default/longest-common-subsequence "sequenceA" "sequenceB"`
+
+As of version 1.0.0, it only accepts strings as inputs, but I'll update in the near future to accept any input as long as there's a comparison function supplied.
 
 ## Usage
 
-FIXME: explanation
+TODO: provide better usage documentation
 
-    $ java -jar longest-common-subsequence-0.1.0-standalone.jar [args]
+let $REPO be the root directory of the repository
+
+You can run the compiled jar file from $REPO with 
+
+    $ java -jar target/uberjar/longest-common-subsequence-1.0.0-standalone.jar sequenceA sequenceB
+
+You can run the executable from $REPO with
+
+    $ target/default/longest-common-subsequence sequenceA sequenceB
+
+sequenceA and sequenceB should both be strings of alphanumeric characters. Each character will be treated as one element
 
 ## Options
 
-FIXME: listing of options this app accepts.
+Currently does not accept any options
 
 ## Examples
 
-...
+    $ java -jar target/uberjar/longest-common-subsequence-1.0.0-standalone.jar "sequenceA" "sequenceB"
+    sequence
+    $ java -jar longest-common-subsequence-1.0.0-standalone.jar "27815" "81264"
+    81
+    $ target/default/longest-common-subsequence "sequenceA" "sequenceB"
+    sequence
+    $ target/default/longest-common-subsequence "27815" "81264"
+    81
 
-### Bugs
+## See Also
 
-...
-
-### Might be Useful
+TODO: Link to various papers discussing runtime of LCS algorithms
+TODO: Link to various other implementations of LIS
 
 ## License
 
-Copyright © 2017 FIXME
+Copyright © 2017 Christopher R. Reyes
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
