@@ -1,6 +1,6 @@
-;    This file is part of longest-common-substring
+;    This file is part of longest-common-subsequence
 ;
-;    longest-common-substring is an implementation of the Reyes-Perera LCS Method
+;    longest-common-subsequence is an implementation of the Reyes-Perera LCS Method
 ;    for finding the longest common subsequence between two inputs in O(N logN) time.
 ;
 ;    Copyright (C) 2017  Christopher R Reyes
