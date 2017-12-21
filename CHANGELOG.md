@@ -1,24 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [Unreleased]
+## [0.0.1] - 2017-05-20
 ### Changed
-- Add a new arity to `make-widget-async` to provide a different widget shape.
+- Finished coding and testing initial implementation
 
-## [0.1.1] - 2017-05-10
+## [1.0.0] - 2017-12-20
 ### Changed
-- Documentation on how to make the widgets.
+- Fixed README, LICENSE, and other documentation
 
-### Removed
-- `make-widget-sync` - we're all async, all the time.
-
-### Fixed
-- Fixed widget maker to keep working when daylight savings switches over.
-
-## 0.1.0 - 2017-05-10
-### Added
-- Files from the new template.
-- Widget maker public API - `make-widget-sync`.
-
-[Unreleased]: https://github.com/your-name/longest-common-subsequence/compare/0.1.1...HEAD
-[0.1.1]: https://github.com/your-name/longest-common-subsequence/compare/0.1.0...0.1.1
+[1.0.0]: https://github.com/creyes17/longest-common-subsequence/compare/1.0.0...HEAD
+[0.0.1]: https://github.com/creyes17/longest-common-subsequence/compare/a18a4a9813d9a363e51e700aa551f229d2f0ad65...1.0.0

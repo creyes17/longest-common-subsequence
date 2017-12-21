@@ -177,7 +177,8 @@ TODO: Link to various other implementations of LIS
 
 ## License
 
-Copyright © 2017 Christopher R. Reyes
+Copyright &copy; 2017 Christopher R Reyes
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+This project is licensed under the [GNU General Public License v3.0][license].
+
+[license]: http://www.gnu.org/licenses/gpl-3.0.txt
